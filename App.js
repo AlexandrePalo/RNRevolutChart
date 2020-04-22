@@ -38,18 +38,15 @@ const path = line()
     .x((d) => xScale(d.date))
     .y((d) => yScale(d.amount))(data)
 const properties = new svgPathProperties(path)
-const totalPath = properties.getTotalLength()
+const totalPath = properties.getTotalLength() // Total length of the path curve
 
 export default function App() {
     const x = useRef(new Animated.Value(0)).current
     const cursor = useRef(null)
     const label = useRef(null)
-    const translateXLabel = x.interpolate({
-        inputRange: [0, totalPath],
-        outputRange: [chartPadding, width - chartPadding],
-    })
 
     const moveCursor = (value) => {
+        // Map position in path to point on layout
         const { x, y } = properties.getPointAtLength(totalPath - value)
         cursor.current.setNativeProps({
             left: x - cursorSize / 2,
@@ -57,7 +54,9 @@ export default function App() {
         })
     }
     const moveLabel = (value) => {
+        // Map position in path to point on layout
         let { x, y } = properties.getPointAtLength(totalPath - value)
+        // Clamp min and max value to be sure that the label is fully displayed
         x < 30 && (x = 30)
         x > width - 30 && (x = width - 30)
         label.current.setNativeProps({
@@ -67,10 +66,12 @@ export default function App() {
     }
 
     useLayoutEffect(() => {
+        // On start
         x.addListener(({ value }) => {
             moveCursor(value)
             moveLabel(value)
         })
+        // Initial positions
         moveCursor(0)
         moveLabel(0)
     })
