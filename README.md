@@ -4,6 +4,8 @@
 
 ### Further dependencies : React Native SVG, D3, SVG Path Properties.
 
+![](demo.gif)
+
 ### Credit : **Alexandre PALO**
 
 ### Licence : **MIT**
